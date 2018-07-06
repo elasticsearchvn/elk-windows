@@ -100,6 +100,6 @@ define NXLOGFILE %ROOT%\data\nxlog.log
     OutputType  LineBased
 </Output>
 
-<Route nxlog>
+<Route logstash>
     Path	in_perfmon => disk_buffer => out_logstash
 </Route>
