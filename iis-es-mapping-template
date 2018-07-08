@@ -1,0 +1,122 @@
+{
+  "order": 0,
+  "template": "log_iis-*",
+  "settings": {
+    "index": {
+      "mapping": {
+        "ignore_malformed": "true"
+      },
+      "refresh_interval": "5s",
+      "unassigned": {
+        "node_left": {
+          "delayed_timeout": "3m"
+        }
+      },
+      "number_of_shards": "1",
+      "number_of_replicas": "1"
+    }
+  },
+  "mappings": {
+    "iis": {
+      "_all": {
+        "enabled": false
+      },
+      "dynamic_templates": [
+        {
+          "string_fields": {
+            "mapping": {
+              "ignore_above": 32000,
+              "norms": false,
+              "type": "keyword"
+            },
+            "match_mapping_type": "string"
+          }
+        }
+      ],
+      "properties": {
+        "bytes_toclient": {
+          "type": "long"
+        }
+        "http_substatus": {
+          "type": "short"
+        },
+        "src_ip_geoip": {
+          "dynamic": true,
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "geo_point"
+            }
+          }
+        },
+        "dst_ip_geoip": {
+          "dynamic": true,
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "geo_point"
+            }
+          }
+        },
+        "dst_name": {
+          "type": "keyword"
+        },
+        "dst_ip": {
+          "type": "ip"
+        },
+        "bytes_toserver": {
+          "type": "long"
+        },
+        "src_ip": {
+          "type": "ip"
+        },
+        "http_agent": {
+          "properties": {
+            "major": {
+              "type": "integer"
+            },
+            "minor": {
+              "type": "integer"
+            },
+            "os_minor": {
+              "type": "integer"
+            },
+            "os_major": {
+              "type": "integer"
+            }
+          }
+        },
+        "path": {
+          "type": "keyword",
+          "fields": {
+            "text": {
+              "type": "text"
+            }
+          }
+        },
+        "all_fields": {
+          "type": "text"
+        },
+        "hostname": {
+          "type": "keyword"
+        },
+        "http_win32_status": {
+          "type": "long"
+        },
+        "dst_port": {
+          "type": "integer"
+        },
+        "http_status": {
+          "type": "short"
+        },
+        "response_time": {
+          "type": "long"
+        },
+        "gmt_time": {
+          "index": false,
+          "type": "keyword"
+        }
+      }
+    }
+  }
+}
