@@ -84,7 +84,7 @@ define NXLOGFILE %ROOT%\data\nxlog.log
         if $raw_event =~ s/\" \"/-1/g ;
         perfmon->parse_csv();
         $hostname = lc(hostname());
-        $type = "performance";
+        $type = "perfmon";
         delete($EventReceivedTime);
         delete($SourceModuleName);
         delete($SourceModuleType);
