@@ -1,0 +1,40 @@
+input {
+    tcp {
+        id => "tcp_5000"
+        port => 5000
+        codec => "json_lines"
+    }
+}
+
+filter {
+    if [type] == "iis" {
+        # Convert IIS log time stamp to local time and send to @timestamp field
+        date {
+            id => "iis_timestamp"
+            match => ["gmt_time", "yyyy-MM-dd HH:mm:ss"]
+            timezone => "Etc/GMT"
+        }
+
+        useragent {
+            id => "iis_useragent"
+            source => "http_useragent"
+            target => "http_agent"
+        }
+
+        mutate {
+            id => "iis_normalize_fields"
+            lowercase => ["site_name"]
+            remove_field => ["[http_agent][patch]"]
+        }
+    }
+}
+
+output {
+    if [type] == "iis" {
+        elasticsearch {
+            id => "iis"
+            hosts => ["127.0.0.1:9200"]
+            index => "log_iis-%{+YYYY.MM}"
+        }
+    }
+}
