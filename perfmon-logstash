@@ -1,0 +1,27 @@
+input {
+    tcp {
+        id => "tcp_5000"
+        port => 5000
+        codec => "json_lines"
+    }
+}
+filter {
+  if [type] == "perfmon" {
+        date {
+            id => "perfmon_timestamp"
+            match => ["EventTime", "MM/dd/yyyy HH:mm:ss.SSS"]
+            timezone => "America/Los_Angeles"
+            locale => "en"
+            remove_field => ["EventTime"]
+        }
+    }
+}
+output {
+  if [type] == "perfmon" {
+        elasticsearch {
+            id => "perfmon"
+            hosts => ["127.0.0.1:9200"]
+            index => "log_perfmon-%{+YYYY.MM}"
+        }
+    }
+}
